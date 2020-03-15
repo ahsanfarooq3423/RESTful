@@ -10,8 +10,13 @@ const boardSchema = new Schema({
     imageUrl : {
         type : String,
         required : true
-    }
-    ,
+    },
+    lists : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'List'
+        }
+    ]
     // userId : {
     //     type : Schema.Types.ObjectId,
     //     required : true

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 
 const boardsRoutes = require('./routes/board');
+const listRoutes = require('./routes/list');
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use((req, res, next) => {
 
 
 app.use(boardsRoutes);
+
+// app.use('/board',listRoutes);
 
 //error handling middleware
 app.use((error, req, res, next) => {
