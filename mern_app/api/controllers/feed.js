@@ -52,10 +52,7 @@ exports.createPost = (req, res, next) => {
 }
 
 exports.getPost = (req, res, next) => {
-    console.log('came in');
     const postId = req.params.postId;
-
-
 
     Post.findById(postId)
         .then(post => {
