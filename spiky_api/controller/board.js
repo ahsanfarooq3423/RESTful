@@ -35,7 +35,13 @@ exports.getBoards = (req, res, next) => {
 exports.getBoard = (req, res, next) => {
     const boardId = req.params.boardId;
     Board.findById(boardId)
-        .populate('list.items')
+        .populate({
+            path : 'list.items',
+            populate : {
+                path : 'cards',
+                model : 'Card'
+            }
+        })
         .then(board => {
             if (board){
                 res.status(200).json({

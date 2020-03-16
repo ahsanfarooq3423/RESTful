@@ -10,6 +10,8 @@ exports.postCard = (req, res, next) => {
     const boardId = req.params.boardId;
     const listId = req.params.listId;
 
+    const cardName = req.body.cardName;
+
     const objBoardId = mongoose.Types.ObjectId(boardId);
     const objListId = mongoose.Types.ObjectId(listId);
     let objCardId;
@@ -17,11 +19,10 @@ exports.postCard = (req, res, next) => {
     let listResponse;
 
     const card = new Card({
-        cardName : 'a temp card 34',
+        cardName : cardName,
         listId : objListId,
         boardId : objBoardId
     })
-
 
 
     Board.findById(boardId)
@@ -32,8 +33,8 @@ exports.postCard = (req, res, next) => {
                 _id: objListId
             }
         })
-        .then(response => {
-            if (response.list.items.length === 1){
+        .then(board => {
+            if (board.list.items.length === 1){
                 return card.addBoardAndListRefToCard(objBoardId, objListId)
             } else {
                 const error = new Error('The List in the given board in not found')
@@ -45,24 +46,21 @@ exports.postCard = (req, res, next) => {
             listResponse = response
             objCardId = response._id;
 
-            Board.findById(boardId)
-                .then(board => {
-                    console.log(board)
-                    // board.addCardRefToBoard(objCardId)
-                })
-                .catch(err => console.log(err))
-
             List.findById(listId)
                 .then(list => {
-                    console.log(list)
+                    list.addCardRefToList(objCardId)
+                })
+                .catch(err => {
+                    next(err)
                 })
 
             return listResponse
             
         })
         .then(response => {
+
             res.status(202).json({
-                message: 'just checking the route',
+                message: 'just checking the bababa route',
                 response : response
             })
         })
