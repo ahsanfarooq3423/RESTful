@@ -1,12 +1,10 @@
 const express = require('express');
 
-const listRouter = express.Router();
+const listController = require('../controller/list');
 
-// listRouter.get('/:boardId', (req,res, next) => {
-//     console.log(req.params.boardId)
-//     res.status(200).json({
-//         message : 'yeasdafsdfa'
-//     })
-// })
+const router = express.Router(); 
 
-module.exports = listRouter;
+router.post('/boards/:boardId', listController.createList);
+
+
+module.exports = router;

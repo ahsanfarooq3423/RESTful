@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const boardsRoutes = require('./routes/board');
 const listRoutes = require('./routes/list');
+const cardRoutes = require('./routes/card');
 
 const app = express();
 
@@ -19,8 +20,8 @@ app.use((req, res, next) => {
 
 
 app.use(boardsRoutes);
-
-// app.use('/board',listRoutes);
+app.use(listRoutes);
+app.use(cardRoutes);
 
 //error handling middleware
 app.use((error, req, res, next) => {

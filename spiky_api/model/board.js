@@ -11,16 +11,31 @@ const boardSchema = new Schema({
         type : String,
         required : true
     },
-    lists : [
-        {
-            type : Schema.Types.ObjectId,
-            ref : 'List'
-        }
-    ]
+    list : {
+        items : [
+            {
+                type : Schema.Types.ObjectId,
+                ref : 'List',
+                cards : [
+                    {
+                        type : Schema.Types.ObjectId,
+                        ref : 'Card'
+                    }
+
+                ]
+            }
+        ]
+    } 
     // userId : {
     //     type : Schema.Types.ObjectId,
     //     required : true
     // }
 }, {timestamps : true})
 
+
+
+boardSchema.methods.addListRefToBoard = function(boardId) {
+    this.list.items.push(mongoose.Types.ObjectId(boardId))
+    return this.save()
+}
 module.exports = mongoose.model('Board', boardSchema);

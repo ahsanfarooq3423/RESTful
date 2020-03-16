@@ -12,6 +12,8 @@ const listSchema =  new Schema({
         required : true,
         ref : 'Board'
     }
-})
+}, {timestamps : true})
+
+
 
 module.exports = mongoose.model('List', listSchema);    

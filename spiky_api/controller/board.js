@@ -1,25 +1,51 @@
+const mongoose = require('mongoose');
+
 const Board = require('../model/board');
 const List = require('../model/list');
 
 exports.getBoards = (req, res, next) => {
-    Board.find()
-        .then(boards => {
-            res.status(200).json({ message: 'Boards Fetched Successfully', boards })
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 404;
-            }
-            next(err)
-        })
+    const full = req.query.full;
+    if (full === 'true') {
+        Board.find()
+            .populate('list.items')
+            .then(boards => {
+                res.status(200).json({ message: 'Boards Fetched Successfully', boards })
+            })
+            .catch(err => {
+                if (!err.statusCode) {
+                    err.statusCode = 404;
+                }
+                next(err)
+            })
+    } else {
+        Board.find()
+            .then(boards => {
+                res.status(200).json({ message: 'Boards Fetched Successfully', boards })
+            })
+            .catch(err => {
+                if (!err.statusCode) {
+                    err.statusCode = 404;
+                }
+                next(err)
+            })
+    }
+
 }
 
 exports.getBoard = (req, res, next) => {
     const boardId = req.params.boardId;
     Board.findById(boardId)
+        .populate('list.items')
         .then(board => {
-            res.status(200).json({
-                message : 'Successfully fetched the board', board })
+            if (board){
+                res.status(200).json({
+                    message: 'Successfully fetched the board', board
+                })
+            } else {
+                const error = new Error("Can't find the board.")
+                error.statusCode  = 404;
+                throw error
+            }
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -49,22 +75,4 @@ exports.createBoard = (req, res, next) => {
 }
 
 
-exports.createList = (req, res, next) => {
-    const boardId = req.params.boardId;
-    console.log(boardId);
-    Board.findById(boardId)
-        .then(response => {
-            console.log(response)
-            res.status(200).json({
-                message : 'in the create list',
-                response
-            })
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err)
-        })
-}
 
