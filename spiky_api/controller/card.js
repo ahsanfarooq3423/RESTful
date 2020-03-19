@@ -4,8 +4,6 @@ const Board = require('../model/board');
 
 const mongoose = require('mongoose');
 
-
-
 exports.postCard = (req, res, next) => {
     const boardId = req.params.boardId;
     const listId = req.params.listId;
@@ -58,9 +56,8 @@ exports.postCard = (req, res, next) => {
             
         })
         .then(response => {
-
             res.status(202).json({
-                message: 'just checking the bababa route',
+                message: 'Created the Card Successfully',
                 response : response
             })
         })

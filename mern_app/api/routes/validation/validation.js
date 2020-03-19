@@ -6,3 +6,6 @@ exports.createPostValidation =  [
     body('content').trim().isLength({ min: 5 })
 ];
 
+
+
+

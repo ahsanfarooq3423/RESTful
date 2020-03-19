@@ -13,6 +13,6 @@ router.get('/posts', feedController.getPosts);
 
 router.post('/post', validator.createPostValidation, feedController.createPost);
 
-router.get('/post/:postId', feedController.getPost)
+router.get('/post/:postId', feedController.getPost);
 
 module.exports = router;
