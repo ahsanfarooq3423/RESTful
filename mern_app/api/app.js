@@ -15,7 +15,7 @@ const fileStorage = multer.diskStorage({
     filename : (req, file, cb) => {
         cb(null, new Date().toISOString() + '-' + file.originalname)
     }
-})
+});
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
@@ -24,6 +24,8 @@ const fileFilter = (req, file, cb) => {
         cb(null, false)
     }
 }
+
+
 
 app.use(bodyParser.json()); // application/json
 app.use(multer({storage : fileStorage, fileFilter : fileFilter}).single('image'));
