@@ -69,6 +69,58 @@ exports.postCard = (req, res, next) => {
         })
 }
 
+exports.updateCard = (req, res, next) => {
+    const boardId = req.params.boardId;
+    const listId = req.params.listId;
+    const cardId = req.params.cardId;
+
+    const updatedCardName = req.body.cardName;
+
+    Board.findById(boardId)
+        .then(board => {
+            if (!board.list.items.includes(mongoose.Types.ObjectId(listId))){
+                console.log(' in the first if block baby')
+                const error = new Error("The List in the specified board for the particular card is not found")
+                throw error;
+            }
+            return List.findById(listId)
+        })
+        .then(list => {
+            if (!list.cards.items.includes(mongoose.Types.ObjectId(cardId))) {
+                const error = new Error("The Card specified in the list is not found.")
+                throw error;
+            }
+
+            return Card.findById(cardId)
+
+        })
+        .then(card => {
+            if (!card) {
+                const error = new Error("The Card is not found in the give list.")
+                throw error;
+            }
+            if (!updatedCardName) {
+                const error = new Error("Card is not updated because no updated information was given")
+                throw error;
+            }
+            card.cardName = updatedCardName
+            return card.save()
+        })
+        .then(result => {
+            res.status(200).json({
+                message : "The card has been updated Successfully",
+                result : result
+            })
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 404;
+            }
+            next(err)
+        })
+
+}
+
 
 exports.deleteCard = (req, res, next) => {
     const boardId = req.params.boardId;

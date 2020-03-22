@@ -38,12 +38,57 @@ exports.createList = (req, res, next) => {
 
 }
 
+exports.updateList = (req, res, next) => {
+    const boardId = req.params.boardId;
+    const listId = req.params.listId;
+    const updatedListName = req.body.listName;
+
+    Board.findById(boardId)
+        .then(board => {
+            if (!board) {
+                const error = new Error('The Board is not found');
+                throw error;
+            }
+
+            if (!board.list.items.includes(mongoose.Types.ObjectId(listId))) {
+                const error = new Error('The List in the specified board is not found')
+            }
+
+            return List.findById(listId)
+
+        .then(list => {
+            if (updatedListName) {
+                list.listName = updatedListName;
+                return list.save()
+            } 
+            const error = new Error('Cannot updated the list because no information was provided')
+            throw error
+        })
+        .then(result => {
+            res.status(200).json({
+                message : "The list has been successfully updated",
+                result : result
+            })
+        }) 
+        } )
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 406;
+            }
+            next(err)
+        })
+}
+
 exports.deleteList = (req, res, next) => {
     const boardId = req.params.boardId;
     const listId = req.params.listId;
 
     Board.findById(boardId)
         .then(board => {
+            if (!board) {
+                const error = new Error('The Board is not found');
+                throw error;
+            }
             let newList = board.list.items.filter(item => {
                 if (item.toString() !== listId) {
                     return item

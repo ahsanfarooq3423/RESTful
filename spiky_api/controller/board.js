@@ -80,6 +80,39 @@ exports.createBoard = (req, res, next) => {
         })
 }
 
+exports.updateBoard = (req, res, next) => {
+    const boardId = req.params.boardId;
+    const updatedBoardName = req.body.boardName;
+    const updatedImageUrl = req.body.imageUrl;
+
+    Board.findById(boardId)
+        .then(board => {
+            if (!board) {
+                const error = new Error('The board you requested is not found');
+                error.statusCode = 404;
+                throw error;
+            }
+            if (updatedBoardName){
+                board.boardName  = updatedBoardName;
+            }
+            if (updatedImageUrl) {
+                board.imageUrl = updatedImageUrl
+            }
+            return board.save()
+        })
+        .then(result => {
+            res.status(200).json({
+                message : 'The board is updated successfully',
+                result : result
+            })
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 406;
+            }
+            next(err)
+        })
+}
 
 exports.deleteBoard = (req, res, next) => {
     const boardId = req.params.boardId;

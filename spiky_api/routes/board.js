@@ -10,6 +10,8 @@ router.post('/boards', boardsController.createBoard);
 
 router.get('/boards/:boardId', boardsController.getBoard);
 
+router.put('/boards/:boardId', boardsController.updateBoard);
+
 router.delete('/boards/:boardId', boardsController.deleteBoard);
 
 
