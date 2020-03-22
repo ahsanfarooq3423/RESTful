@@ -36,20 +36,20 @@ exports.getBoard = (req, res, next) => {
     const boardId = req.params.boardId;
     Board.findById(boardId)
         .populate({
-            path : 'list.items',
-            populate : {
-                path : 'cards',
-                model : 'Card'
+            path: 'list.items',
+            populate: {
+                path: 'cards',
+                model: 'Card'
             }
         })
         .then(board => {
-            if (board){
+            if (board) {
                 res.status(200).json({
                     message: 'Successfully fetched the board', board
                 })
             } else {
                 const error = new Error("Can't find the board.")
-                error.statusCode  = 404;
+                error.statusCode = 404;
                 throw error
             }
         })
@@ -78,6 +78,43 @@ exports.createBoard = (req, res, next) => {
             }
             next(err)
         })
+}
+
+
+exports.deleteBoard = (req, res, next) => {
+    const boardId = req.params.boardId;
+
+    Board.findById(boardId)
+        .then(board => {
+            if (!board) {
+                const error = new Error('Board not found');
+                error.statusCode = 404;
+                throw error
+            }
+            return board
+        })
+        .then(board => {
+            return List.deleteMany({boardId  : boardId})
+        .then(response => {
+            Board.findByIdAndRemove(boardId)
+            .then(result => {
+                res.status(200).json({
+                    message : 'The board has been deleted successfully',
+                    result : result
+                })
+            })
+            .catch(err => {
+                next(err)
+            })
+        })   
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 406;
+            }
+            next(err)
+        })
+
 }
 
 

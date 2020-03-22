@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Board = require('../model/board');
 const List = require('../model/list');
+const Card = require('../model/card');
+
 
 exports.createList = (req, res, next) => {
     const stringBoardId = req.params.boardId;
@@ -34,4 +36,38 @@ exports.createList = (req, res, next) => {
         throw error;
     }
 
+}
+
+exports.deleteList = (req, res, next) => {
+    const boardId = req.params.boardId;
+    const listId = req.params.listId;
+
+    Board.findById(boardId)
+        .then(board => {
+            let newList = board.list.items.filter(item => {
+                if (item.toString() !== listId) {
+                    return item
+                } 
+            })
+            board.list.items =  newList
+            return board.save()
+        .then(result => {
+            return List.findByIdAndRemove(listId)
+        }) 
+        .then(result => {
+            return Card.deleteMany({ listId : listId })
+        })
+        .then(response => {
+            res.status(200).json({
+                message : "this is new freaking second time response",
+                response : response
+            })
+        }) 
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 406;
+            }
+            next(err)
+        })
 }

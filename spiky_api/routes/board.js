@@ -10,5 +10,7 @@ router.post('/boards', boardsController.createBoard);
 
 router.get('/boards/:boardId', boardsController.getBoard);
 
+router.delete('/boards/:boardId', boardsController.deleteBoard);
+
 
 module.exports = router;
