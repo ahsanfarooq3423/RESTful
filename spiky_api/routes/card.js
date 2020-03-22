@@ -13,4 +13,4 @@ router.put('/boards/:boardId/:listId/:cardId', cardController.updateCard);
 
 router.delete('/boards/:boardId/:listId/:cardId', cardController.deleteCard );
 
-module.exports = router
+module.exports = router;
