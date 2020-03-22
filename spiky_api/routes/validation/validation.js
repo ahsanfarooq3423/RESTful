@@ -1,8 +1,7 @@
 const {body} = require('express-validator');
 
 exports.boardValidator = [
-    body('boardName').trim().isLength({min : 3}).withMessage('Board Name must be atleast 3 characters long.'),
-    body('imageUrl').trim().isLength({min : 5}).withMessage('The image url provided is not correct')
+    body('boardName').trim().isLength({min : 3}).withMessage('Board Name must be atleast 3 characters long.')
 ]
 
 exports.listValidator = [

@@ -73,9 +73,13 @@ exports.createBoard = (req, res, next) => {
         const error = new Error('Validation failed, the entered data is not correct')
         throw error
     }
+    if (!req.file) {
+        const error = new Error('Error !! Image File not uploaded')
+        throw error
+    }
 
     const boardName = req.body.boardName;
-    const imageUrl = req.body.imageUrl;
+    const imageUrl = req.file.path;
 
     const board = new Board({ boardName, imageUrl })
 
