@@ -3,8 +3,18 @@ const Board = require('../model/board');
 const List = require('../model/list');
 const Card = require('../model/card');
 
+const { validationResult } = require('express-validator');
+
+
 
 exports.createList = (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed, the entered data is not correct')
+        throw error
+    }
+
     const stringBoardId = req.params.boardId;
     const boardId = mongoose.Types.ObjectId(stringBoardId);
     const listName = req.body.listName;
@@ -39,6 +49,13 @@ exports.createList = (req, res, next) => {
 }
 
 exports.updateList = (req, res, next) => {
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed, the entered data is not correct')
+        throw error
+    }
+
     const boardId = req.params.boardId;
     const listId = req.params.listId;
     const updatedListName = req.body.listName;

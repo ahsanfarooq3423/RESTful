@@ -2,9 +2,18 @@ const Card = require('../model/card');
 const List = require('../model/list');
 const Board = require('../model/board');
 
+const { validationResult } = require('express-validator');
+
 const mongoose = require('mongoose');
 
 exports.postCard = (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed, the entered data is not correct')
+        throw error
+    }
+
     const boardId = req.params.boardId;
     const listId = req.params.listId;
 
@@ -70,6 +79,13 @@ exports.postCard = (req, res, next) => {
 }
 
 exports.updateCard = (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed, the entered data is not correct')
+        throw error
+    }
+
     const boardId = req.params.boardId;
     const listId = req.params.listId;
     const cardId = req.params.cardId;

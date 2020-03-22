@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const Board = require('../model/board');
 const List = require('../model/list');
 
+
+const { validationResult } = require('express-validator');
+
+
 exports.getBoards = (req, res, next) => {
     const full = req.query.full;
     if (full === 'true') {
@@ -63,6 +67,13 @@ exports.getBoard = (req, res, next) => {
 
 
 exports.createBoard = (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed, the entered data is not correct')
+        throw error
+    }
+
     const boardName = req.body.boardName;
     const imageUrl = req.body.imageUrl;
 
@@ -81,6 +92,13 @@ exports.createBoard = (req, res, next) => {
 }
 
 exports.updateBoard = (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed, the entered data is not correct')
+        throw error
+    }
+
     const boardId = req.params.boardId;
     const updatedBoardName = req.body.boardName;
     const updatedImageUrl = req.body.imageUrl;
