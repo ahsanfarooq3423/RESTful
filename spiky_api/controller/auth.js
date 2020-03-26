@@ -27,7 +27,7 @@ exports.signup = (req, res, next) => {
         })
         .then(result => {
             res.status(200).json({
-                message: 'Testing on the fly',
+                message: 'You have successfully registered your account',
                 result: result
             })
         })

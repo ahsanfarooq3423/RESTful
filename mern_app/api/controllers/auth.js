@@ -68,7 +68,7 @@ exports.login = (req, res, next) => {
                     name : loadedUser.name,
                     userId : loadedUser._id.toString()
                 },
-                'thisisjwtsecretkey',
+               l,
                 {
                     expiresIn : '1h'
                 }
