@@ -8,6 +8,7 @@ const path  = require('path');
 const boardsRoutes = require('./routes/board');
 const listRoutes = require('./routes/list');
 const cardRoutes = require('./routes/card');
+const authRoutes = require('./routes/auth');
 
 const dbConfig = require('./config/db');
 
@@ -47,12 +48,14 @@ app.use((req, res, next) => {
 app.use(boardsRoutes);
 app.use(listRoutes);
 app.use(cardRoutes);
+app.use(authRoutes);
 
 //error handling middleware
 app.use((error, req, res, next) => {
     const statusCode = error.statusCode || 500;
     const message = error.message;
-    res.status(statusCode).json({message})
+    const data = error.data;
+    res.status(statusCode).json({message, data : data })
 })
 
 

@@ -14,8 +14,14 @@ const userSchema = new Schema({
         type : String,
         required : true
     },
-    status : {
-        type : String,
-        required : true
-    }
-})
+    boards : [
+        {
+            type : Schema.Types.ObjectId
+        }
+    ]
+}, {timestamps : true})
+
+
+
+module.exports = mongoose.model('User', userSchema);
+

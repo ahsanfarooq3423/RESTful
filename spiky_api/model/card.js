@@ -20,7 +20,7 @@ const cardSchema = new Schema({
         required : true
     }
 
-})
+}, {timestamps : true})
 
 cardSchema.methods.addBoardAndListRefToCard = function(boardId, listId) {
     this.listId = listId
